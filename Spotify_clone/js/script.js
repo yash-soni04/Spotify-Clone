@@ -18,7 +18,7 @@ function secondsToMinutesSeconds(seconds) {
 }
 async function getSongs(folder) {
   currFolder = folder;
-  let a = await fetch(`http://192.168.56.1:3000/Spotify_clone/songs/${currFolder}`);
+  let a = await fetch(`/Spotify-Clone/Spotify_clone/songs/${currFolder}`);
   let response = await a.text();
   let div = document.createElement("div")
   div.innerHTML = response
@@ -27,15 +27,20 @@ async function getSongs(folder) {
   for (let index = 0; index < as.length; index++) {
     const element = as[index];
     if (element.href.endsWith(".mp3")) {
-      songs.push(element.href.split(`/songs/${currFolder}/`)[1])
+      songs.push(element.href.split(`/songs/${currFolder}`)[1])
 
     }
   }
   let songList = document.querySelector(".songList").getElementsByTagName("ul")[0];
   songList.innerHTML = "";
   for (const song of songs) {
-    let songName = song.replaceAll("_", " ").replaceAll(".mp3", "").replaceAll("%20", " ").split("-")[0];
-    let artist = song.replaceAll("_", " ").replaceAll(".mp3", "").replaceAll("%20", " ").split("-")[1];
+  console.log('Current Song:', song);
+    if(!songParts){
+  let songParts = song;
+  console.log('Song Parts:', songParts);
+  let songName = songParts[0];
+  let artist = songParts[1];
+    }
 
     // Create list item for each song
     let listItem = document.createElement('li');
@@ -63,18 +68,10 @@ async function getSongs(folder) {
 }
 //playing Music
 
-const playMusic = (track, pause = false) => {
-  currentsong.src = `/Spotify_clone/songs/${currFolder}/` + track
-  if (!pause) {
-    currentsong.play()
-    playBtn.src = "/Spotify_clone/assets/pause.svg"
-  }
-  document.querySelector(".songInfo").innerHTML = track.replaceAll("_", " ").replaceAll(".mp3", "").replaceAll("%20", " ").split("-")[0]
-  document.querySelector(".songTime").innerHTML = "00:00/00:00"
 
-}
+
 async function displayAlbums() {
-  let a = await fetch(`http://192.168.56.1:3000/Spotify_clone/songs/`);
+  let a = await fetch(`/Spotify_clone/songs/`);
   let response = await a.text();
   let div = document.createElement("div")
   div.innerHTML = response
@@ -114,6 +111,25 @@ async function displayAlbums() {
   
 }
 async function main() {
+  const playMusic = async(track, pause = false) => {
+  console.log('Track:', track);
+  currentsong.src = `/Spotify_clone/songs/${currFolder}/` + track;
+  if (!pause) {
+    currentsong.play();
+    playBtn.src = "/Spotify_clone/assets/pause.svg";
+  }
+  let songInfoElement = document.querySelector(".songInfo");
+  if(songInfoElement) {
+    while (songInfoElement.firstChild) {
+      songInfoElement.removeChild(songInfoElement.firstChild);
+    }
+    let trackName = document.createTextNode(track[0]);
+    songInfoElement.appendChild(trackName);
+  } else {
+    console.error("Element with class 'songInfo' not found.");
+  }
+  document.querySelector(".songTime").innerHTML = "00:00/00:00";
+}
   await getSongs("1");
 
   playMusic(songs[0], true);
@@ -239,5 +255,4 @@ async function main() {
 }
 
 main();
-
 
