@@ -18,7 +18,7 @@ function secondsToMinutesSeconds(seconds) {
 }
 async function getSongs(folder) {
   currFolder = folder;
-  let a = await fetch(`/Spotify-Clone/songs/${currFolder}`);
+  let a = await fetch(`/Spotify-Clone/songs/${currFolder}/`);
   let response = await a.text();
   let div = document.createElement("div")
   div.innerHTML = response
@@ -59,6 +59,7 @@ async function getSongs(folder) {
     // Append the list item to the song list
     songList.appendChild(listItem);
   }
+  console.log(songs)
   return songs
 }
 //playing Music
@@ -74,7 +75,7 @@ const playMusic = (track, pause = false) => {
 
 }
 async function displayAlbums() {
-  let a = await fetch(`/songs/`);
+  let a = await fetch(`/Spotify-Clone/songs/`);
   let response = await a.text();
   let div = document.createElement("div")
   div.innerHTML = response
