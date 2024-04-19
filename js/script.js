@@ -1,4 +1,4 @@
-
+//##'/Spotify-Clone/ is the repository name change it with you folder name or remove it##
 let songs = []
 let currFolder;
 let currentsong = new Audio;
@@ -28,7 +28,6 @@ async function getSongs(folder) {
     const element = as[index];
     if (element.href.endsWith(".mp3")) {
       songs.push(element.href.split(`/Spotify-Clone/songs/${currFolder}/`)[1])
-
     }
   }
   let songList = document.querySelector(".songList").getElementsByTagName("ul")[0];
