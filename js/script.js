@@ -64,10 +64,10 @@ async function getSongs(folder) {
 //playing Music
 
 const playMusic = (track, pause = false) => {
-  currentsong.src = `/Spotify_clone/songs/${currFolder}/` + track
+  currentsong.src = `/songs/${currFolder}/` + track
   if (!pause) {
     currentsong.play()
-    playBtn.src = "/Spotify_clone/assets/pause.svg"
+    playBtn.src = "/assets/pause.svg"
   }
   document.querySelector(".songInfo").innerHTML = track.replaceAll("_", " ").replaceAll(".mp3", "").replaceAll("%20", " ").split("-")[0]
   document.querySelector(".songTime").innerHTML = "00:00/00:00"
@@ -88,7 +88,7 @@ async function displayAlbums() {
     if (e.href.includes("/songs")) {
       let folder = (e.href.split("/").slice(-2)[0]);
       //get metadata of the folder
-      let a = await fetch(`/Spotify_clone/songs/${folder}/info.json`)
+      let a = await fetch(`/songs/${folder}/info.json`)
       let response = await a.json();
       cardcontainer.innerHTML = cardcontainer.innerHTML + `<div class="card" data-folder="${folder}">
       <img src="songs/${folder}/cover.jpg" alt="" />
@@ -124,11 +124,11 @@ async function main() {
   playBtn.addEventListener('click', () => {
     if (currentsong.paused) {
       currentsong.play();
-      playBtn.src = "/Spotify_clone/assets/pause.svg"
+      playBtn.src = "/assets/pause.svg"
     }
     else {
       currentsong.pause();
-      playBtn.src = "/Spotify_clone/assets/play.svg"
+      playBtn.src = "/assets/play.svg"
     }
   })
   currentsong.addEventListener("timeupdate", () => {
@@ -184,11 +184,11 @@ async function main() {
     if (e.code === "Space") {
       if (currentsong.paused) {
         currentsong.play();
-        playBtn.src = "/Spotify_clone/assets/pause.svg"
+        playBtn.src = "/assets/pause.svg"
       }
       else {
         currentsong.pause();
-        playBtn.src = "/Spotify_clone/assets/play.svg"
+        playBtn.src = "/assets/play.svg"
       }
     }
     else if (e.code == "ArrowLeft") {
@@ -208,7 +208,7 @@ async function main() {
 
   // document.addEventListener("visibilitychange", (e) => {
   //   currentsong.pause();
-  //   playBtn.src = "/Spotify_clone/assets/play.svg"
+  //   playBtn.src = "/assets/play.svg"
   // })
   // Display All the Albums on the Page
  
@@ -225,11 +225,11 @@ async function main() {
   })
   document.querySelector(".volume>img").addEventListener("click", e => {
     if (currentsong.volume === 0) { 
-      e.target.src= "/Spotify_clone/assets/volume.svg";
+      e.target.src= "/assets/volume.svg";
       currentsong.volume = 1;
       document.querySelector(".volume").getElementsByTagName("input")[0] .value = '100'
     } else if (currentsong.volume > 0) { 
-      e.target.src="/Spotify_clone/assets/mute.svg";
+      e.target.src="/assets/mute.svg";
       currentsong.volume = 0;
       document.querySelector(".volume").getElementsByTagName("input")[0].value = '0';
     }
