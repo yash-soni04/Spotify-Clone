@@ -1,4 +1,3 @@
-//##'/ is the repository name change it with you folder name or remove it##
 let songs = []
 let currFolder;
 let currentsong = new Audio;
@@ -18,7 +17,7 @@ function secondsToMinutesSeconds(seconds) {
 }
 async function getSongs(folder) {
   currFolder = folder;
-  let a = await fetch(`/songs/${currFolder}/`);
+  let a = await fetch(`songs/${currFolder}`);
   let response = await a.text();
   let div = document.createElement("div")
   div.innerHTML = response
@@ -27,7 +26,8 @@ async function getSongs(folder) {
   for (let index = 0; index < as.length; index++) {
     const element = as[index];
     if (element.href.endsWith(".mp3")) {
-      songs.push(element.href.split(`/songs/${currFolder}/`)[1])
+      songs.push(element.href.split(`songs/${currFolder}/`)[1])
+
     }
   }
   let songList = document.querySelector(".songList").getElementsByTagName("ul")[0];
@@ -58,23 +58,22 @@ async function getSongs(folder) {
     // Append the list item to the song list
     songList.appendChild(listItem);
   }
-  console.log(songs)
   return songs
 }
 //playing Music
 
 const playMusic = (track, pause = false) => {
-  currentsong.src = `/songs/${currFolder}/` + track
+  currentsong.src = `songs/${currFolder}/` + track
   if (!pause) {
     currentsong.play()
-    playBtn.src = "/assets/pause.svg"
+    playBtn.src = "assets/pause.svg"
   }
   document.querySelector(".songInfo").innerHTML = track.replaceAll("_", " ").replaceAll(".mp3", "").replaceAll("%20", " ").split("-")[0]
   document.querySelector(".songTime").innerHTML = "00:00/00:00"
 
 }
 async function displayAlbums() {
-  let a = await fetch(`/songs/`);
+  let a = await fetch(`songs/`);
   let response = await a.text();
   let div = document.createElement("div")
   div.innerHTML = response
@@ -85,13 +84,13 @@ async function displayAlbums() {
     const e = array[index];
 
 
-    if (e.href.includes("/songs")) {
+    if (e.href.includes(`songs`)) {
       let folder = (e.href.split("/").slice(-2)[0]);
       //get metadata of the folder
-      let a = await fetch(`/songs/${folder}/info.json`)
+      let a = await fetch(`songs/${folder}/info.json`)
       let response = await a.json();
       cardcontainer.innerHTML = cardcontainer.innerHTML + `<div class="card" data-folder="${folder}">
-      <img src="songs/${folder}/cover.jpg" alt="" />
+      <img src="songs/${folder}/cover.jpg" alt=""/>
       <div class="play">
         <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 24 24"
           class="Svg-sc-ytk21e-0 bneLcE">
@@ -124,11 +123,11 @@ async function main() {
   playBtn.addEventListener('click', () => {
     if (currentsong.paused) {
       currentsong.play();
-      playBtn.src = "/assets/pause.svg"
+      playBtn.src = "assets/pause.svg"
     }
     else {
       currentsong.pause();
-      playBtn.src = "/assets/play.svg"
+      playBtn.src = "assets/play.svg"
     }
   })
   currentsong.addEventListener("timeupdate", () => {
@@ -184,11 +183,11 @@ async function main() {
     if (e.code === "Space") {
       if (currentsong.paused) {
         currentsong.play();
-        playBtn.src = "/assets/pause.svg"
+        playBtn.src = "assets/pause.svg"
       }
       else {
         currentsong.pause();
-        playBtn.src = "/assets/play.svg"
+        playBtn.src = "assets/play.svg"
       }
     }
     else if (e.code == "ArrowLeft") {
@@ -208,7 +207,7 @@ async function main() {
 
   // document.addEventListener("visibilitychange", (e) => {
   //   currentsong.pause();
-  //   playBtn.src = "/assets/play.svg"
+  //   playBtn.src = "assets/play.svg"
   // })
   // Display All the Albums on the Page
  
@@ -225,11 +224,11 @@ async function main() {
   })
   document.querySelector(".volume>img").addEventListener("click", e => {
     if (currentsong.volume === 0) { 
-      e.target.src= "/assets/volume.svg";
+      e.target.src= "assets/volume.svg";
       currentsong.volume = 1;
       document.querySelector(".volume").getElementsByTagName("input")[0] .value = '100'
     } else if (currentsong.volume > 0) { 
-      e.target.src="/assets/mute.svg";
+      e.target.src="assets/mute.svg";
       currentsong.volume = 0;
       document.querySelector(".volume").getElementsByTagName("input")[0].value = '0';
     }
@@ -237,7 +236,6 @@ async function main() {
 
 
 }
-
 main();
 
 
